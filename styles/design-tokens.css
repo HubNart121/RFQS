@@ -1,0 +1,80 @@
+/* =============================================================
+   DESIGN TOKENS — Neo-Industrial Procurement System
+   ============================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* --- Brand Colors --- */
+  --color-bg:           #0A0A0A;
+  --color-surface:      #141414;
+  --color-surface-2:    #1E1E1E;
+  --color-surface-3:    #252525;
+  --color-border:       #2A2A2A;
+  --color-border-light: #333333;
+
+  /* --- Text --- */
+  --color-text:         #F5F5F5;
+  --color-text-muted:   #888888;
+  --color-text-subtle:  #555555;
+
+  /* --- Signal Colors (Status) --- */
+  --color-orange:       #FF6B00;  /* RFQ / Pending */
+  --color-orange-dim:   #FF6B001A;
+  --color-green:        #00C851;  /* PO Complete / Delivered */
+  --color-green-dim:    #00C8511A;
+  --color-red:          #FF3B30;  /* Cancelled / Overdue */
+  --color-red-dim:      #FF3B301A;
+  --color-blue:         #0A84FF;  /* In Transit */
+  --color-blue-dim:     #0A84FF1A;
+  --color-yellow:       #FFD60A;  /* Draft / Waiting */
+  --color-yellow-dim:   #FFD60A1A;
+  --color-teal:         #5AC8FA;  /* Confirmed */
+  --color-teal-dim:     #5AC8FA1A;
+
+  /* --- Geometry --- */
+  --radius-sharp:   2px;
+  --radius-medium:  6px;
+  --radius-full:    9999px;
+
+  /* --- Spacing (8-point grid) --- */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* --- Typography --- */
+  --font-sans:   'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:   'JetBrains Mono', 'Courier New', monospace;
+
+  --text-xs:   11px;
+  --text-sm:   13px;
+  --text-base: 15px;
+  --text-lg:   17px;
+  --text-xl:   20px;
+  --text-2xl:  24px;
+  --text-3xl:  30px;
+  --text-4xl:  36px;
+
+  /* --- Shadows --- */
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-md:  0 4px 12px rgba(0, 0, 0, 0.6);
+  --shadow-lg:  0 8px 32px rgba(0, 0, 0, 0.7);
+
+  /* --- Transitions --- */
+  --transition-fast:   150ms ease-out;
+  --transition-normal: 250ms ease-out;
+  --transition-slow:   400ms ease-out;
+
+  /* --- Sidebar --- */
+  --sidebar-width:       240px;
+  --sidebar-width-icon:  60px;
+  --topbar-height:       56px;
+  --bottom-nav-height:   64px;
+}

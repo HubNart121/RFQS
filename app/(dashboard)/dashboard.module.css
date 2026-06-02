@@ -1,0 +1,33 @@
+.shell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+
+.main {
+  flex: 1;
+  /* Offset for fixed sidebar */
+  margin-left: var(--sidebar-width);
+  padding-top: var(--topbar-height);
+  min-width: 0;
+}
+
+.content {
+  padding: var(--space-6);
+  min-height: calc(100vh - var(--topbar-height));
+  animation: fadeIn 200ms ease-out;
+}
+
+/* Mobile: no sidebar offset, add bottom nav space */
+@media (max-width: 767px) {
+  .main {
+    margin-left: 0;
+    padding-bottom: var(--bottom-nav-height);
+  }
+  .content { padding: var(--space-4); }
+}
+
+/* Tablet: icon-only sidebar */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .main { margin-left: var(--sidebar-width-icon); }
+}

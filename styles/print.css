@@ -1,0 +1,62 @@
+/* Print/PDF styles for RFQ and PO documents */
+@media print {
+  /* Hide UI elements */
+  nav, aside, header, footer,
+  [data-no-print],
+  button:not([data-print-visible]) {
+    display: none !important;
+  }
+
+  /* Reset layout */
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 11pt;
+  }
+
+  .print-document {
+    display: block !important;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Document header */
+  .print-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid #000;
+    padding-bottom: 12pt;
+    margin-bottom: 16pt;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+  }
+
+  th, td {
+    border: 1px solid #ccc;
+    padding: 6pt 8pt;
+    text-align: left;
+  }
+
+  th {
+    background: #f0f0f0 !important;
+    font-weight: 600;
+  }
+
+  /* Page break */
+  .print-page-break { page-break-after: always; }
+
+  /* Force page size A4 */
+  @page {
+    size: A4 portrait;
+    margin: 20mm 15mm;
+  }
+}
