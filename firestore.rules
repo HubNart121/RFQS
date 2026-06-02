@@ -1,0 +1,14 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId}         { allow read: if request.auth.uid == userId; allow write: if isLoggedIn(); }
+    match /products/{id}          { allow read, write: if isLoggedIn(); }
+    match /suppliers/{id}         { allow read, write: if isLoggedIn(); }
+    match /logistics/{id}         { allow read, write: if isLoggedIn(); }
+    match /rfqs/{id}              { allow read, write: if isLoggedIn(); }
+    match /purchase_orders/{id}   { allow read, write: if isLoggedIn(); }
+    match /logs/{id}              { allow read: if isLoggedIn(); allow write: if isLoggedIn(); }
+
+    function isLoggedIn() { return request.auth != null; }
+  }
+}

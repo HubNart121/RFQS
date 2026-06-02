@@ -42,31 +42,31 @@ async function compressImage(file: File, maxSizeKB = 500): Promise<Blob> {
   })
 }
 
+// Convert Blob to Base64 Data URL
+async function blobToBase64(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onloadend = () => resolve(reader.result as string)
+    reader.onerror = reject
+    reader.readAsDataURL(blob)
+  })
+}
+
 export async function uploadProductImage(
   file: File,
   productId: string
 ): Promise<{ url: string; thumbUrl: string }> {
-  const compressed = await compressImage(file, 500)
-  const path = `products/${productId}/main.webp`
-  const storageRef = ref(storage, path)
-  await uploadBytes(storageRef, compressed, { contentType: 'image/webp' })
-  const url = await getDownloadURL(storageRef)
+  // Compress main image to very small size (target <150KB)
+  const compressed = await compressImage(file, 150)
+  const url = await blobToBase64(compressed)
 
-  // Create thumbnail (smaller size)
-  const thumbBlob = await compressImage(file, 100)
-  const thumbPath = `products/${productId}/thumb.webp`
-  const thumbRef = ref(storage, thumbPath)
-  await uploadBytes(thumbRef, thumbBlob, { contentType: 'image/webp' })
-  const thumbUrl = await getDownloadURL(thumbRef)
+  // Create thumbnail (smaller size, target <40KB)
+  const thumbBlob = await compressImage(file, 40)
+  const thumbUrl = await blobToBase64(thumbBlob)
 
   return { url, thumbUrl }
 }
 
 export async function deleteProductImage(productId: string): Promise<void> {
-  try {
-    await deleteObject(ref(storage, `products/${productId}/main.webp`))
-    await deleteObject(ref(storage, `products/${productId}/thumb.webp`))
-  } catch {
-    // Ignore if files don't exist
-  }
+  // No-op because images are stored inline within the Firestore document
 }
