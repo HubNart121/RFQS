@@ -572,13 +572,51 @@ export default function RFQsPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {selectedRFQ.items?.map((item, idx) => (
-                        <tr key={idx}>
-                          <td style={{ fontWeight: 600 }}>{item.productName}</td>
-                          <td style={{ textAlign: 'center', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>{item.quantity}</td>
-                          <td>{item.unit}</td>
-                        </tr>
-                      ))}
+                      {selectedRFQ.items?.map((item, idx) => {
+                        const prod = products.find(p => p.id === item.productId || p.name === item.productName)
+                        const displayImgUrl = item.imageUrl || prod?.imageUrl
+
+                        return (
+                          <tr key={idx}>
+                            <td>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+                                {displayImgUrl ? (
+                                  <img
+                                    src={displayImgUrl}
+                                    alt={item.productName}
+                                    style={{
+                                      width: '40px',
+                                      height: '40px',
+                                      objectFit: 'cover',
+                                      borderRadius: '4px',
+                                      border: '1px solid var(--color-border)',
+                                      flexShrink: 0
+                                    }}
+                                  />
+                                ) : (
+                                  <div style={{
+                                    width: '40px',
+                                    height: '40px',
+                                    borderRadius: '4px',
+                                    background: '#11151F',
+                                    border: '1px solid var(--color-border)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '20px',
+                                    flexShrink: 0
+                                  }}>
+                                    📦
+                                  </div>
+                                )}
+                                <span style={{ fontWeight: 600 }}>{item.productName}</span>
+                              </div>
+                            </td>
+                            <td style={{ textAlign: 'center', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>{item.quantity}</td>
+                            <td>{item.unit}</td>
+                          </tr>
+                        )
+                      })}
                     </tbody>
                   </table>
 
