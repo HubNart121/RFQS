@@ -5,7 +5,9 @@
   left: var(--sidebar-width);
   right: 0;
   height: var(--topbar-height);
-  background: var(--color-surface);
+  background: rgba(7, 9, 14, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
   display: flex;
   align-items: center;
@@ -16,8 +18,9 @@
 }
 
 .title {
-  font-size: var(--text-base);
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
   color: var(--color-text);
   white-space: nowrap;
   overflow: hidden;
@@ -41,34 +44,39 @@
 .userEmail {
   font-size: var(--text-sm);
   color: var(--color-text);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .userRole {
-  font-size: var(--text-xs);
-  color: var(--color-text-muted);
-  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-orange);
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 1px;
 }
 
 .logoutBtn {
-  padding: var(--space-2) var(--space-4);
-  background: transparent;
-  border: 1px solid var(--color-border-light);
+  padding: 8px 16px;
+  background: rgba(255, 56, 96, 0.08);
+  border: 1px solid rgba(255, 56, 96, 0.2);
   border-radius: var(--radius-sharp);
-  color: var(--color-text-muted);
+  color: var(--color-red);
   font-size: var(--text-sm);
-  font-family: var(--font-mono);
+  font-weight: 600;
   cursor: pointer;
   transition: all var(--transition-fast);
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
 }
 
 .logoutBtn:hover {
+  background: var(--color-red);
+  color: #000;
   border-color: var(--color-red);
-  color: var(--color-red);
-  background: var(--color-red-dim);
+  box-shadow: 0 0 15px rgba(255, 56, 96, 0.3);
+  transform: translateY(-1px);
 }
 
 @media (max-width: 767px) {

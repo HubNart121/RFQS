@@ -1,41 +1,46 @@
 /* =============================================================
-   DESIGN TOKENS — Neo-Industrial Procurement System
+   DESIGN TOKENS — Sleek Cyber-Minimalist Procurement System
    ============================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  /* --- Brand Colors --- */
-  --color-bg:           #0A0A0A;
-  --color-surface:      #141414;
-  --color-surface-2:    #1E1E1E;
-  --color-surface-3:    #252525;
-  --color-border:       #2A2A2A;
-  --color-border-light: #333333;
+  /* --- Premium Brand Colors --- */
+  --color-bg:           #07090E;  /* Deep space navy black */
+  --color-surface:      #0F131C;  /* Polished slate card */
+  --color-surface-2:    #161B26;  /* Lighter active card */
+  --color-surface-3:    #1F2533;  /* High-contrast element */
+  --color-border:       #1E2433;  /* Fine cybernetic border */
+  --color-border-light: rgba(255, 255, 255, 0.08); /* Subtle glow divider */
 
   /* --- Text --- */
-  --color-text:         #F5F5F5;
-  --color-text-muted:   #888888;
-  --color-text-subtle:  #555555;
+  --color-text:         #F3F5F9;  /* Crisp ice white */
+  --color-text-muted:   #8A94A6;  /* Soft cool gray */
+  --color-text-subtle:  #4E5868;  /* Deep dark placeholder */
 
-  /* --- Signal Colors (Status) --- */
-  --color-orange:       #FF6B00;  /* RFQ / Pending */
-  --color-orange-dim:   #FF6B001A;
-  --color-green:        #00C851;  /* PO Complete / Delivered */
-  --color-green-dim:    #00C8511A;
-  --color-red:          #FF3B30;  /* Cancelled / Overdue */
-  --color-red-dim:      #FF3B301A;
-  --color-blue:         #0A84FF;  /* In Transit */
-  --color-blue-dim:     #0A84FF1A;
-  --color-yellow:       #FFD60A;  /* Draft / Waiting */
-  --color-yellow-dim:   #FFD60A1A;
-  --color-teal:         #5AC8FA;  /* Confirmed */
-  --color-teal-dim:     #5AC8FA1A;
+  /* --- Signal Colors (Status Gradients) --- */
+  --color-orange:       #FF7A00;  /* Signal Orange */
+  --color-orange-dim:   rgba(255, 122, 0, 0.12);
+  --color-green:        #00E676;  /* Premium Emerald */
+  --color-green-dim:    rgba(0, 230, 118, 0.12);
+  --color-red:          #FF3860;  /* Crimson Alert */
+  --color-red-dim:      rgba(255, 56, 96, 0.12);
+  --color-blue:         #00B0FF;  /* Electric Blue */
+  --color-blue-dim:     rgba(0, 176, 255, 0.12);
+  --color-yellow:       #FFD600;  /* Cyber Gold */
+  --color-yellow-dim:   rgba(255, 214, 0, 0.12);
+  --color-teal:         #00E5FF;  /* Cool Cyan */
+  --color-teal-dim:     rgba(0, 229, 255, 0.12);
 
-  /* --- Geometry --- */
-  --radius-sharp:   2px;
-  --radius-medium:  6px;
-  --radius-full:    9999px;
+  /* --- Gradients --- */
+  --gradient-orange:    linear-gradient(135deg, #FF9500 0%, #FF5E00 100%);
+  --gradient-green:     linear-gradient(135deg, #00E676 0%, #00B0FF 100%);
+  --gradient-dark:      linear-gradient(180deg, #121824 0%, #0B0E15 100%);
+
+  /* --- Geometry (Polished Rounded Corners) --- */
+  --radius-sharp:   8px;      /* Sharp but modern base card */
+  --radius-medium:  12px;     /* Premium main container roundedness */
+  --radius-full:    9999px;   /* Pills & Badges */
 
   /* --- Spacing (8-point grid) --- */
   --space-1:  4px;
@@ -49,32 +54,34 @@
   --space-12: 48px;
   --space-16: 64px;
 
-  /* --- Typography --- */
-  --font-sans:   'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* --- Typography (Outfit is super-premium) --- */
+  --font-sans:   'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono:   'JetBrains Mono', 'Courier New', monospace;
 
-  --text-xs:   11px;
-  --text-sm:   13px;
-  --text-base: 15px;
-  --text-lg:   17px;
-  --text-xl:   20px;
-  --text-2xl:  24px;
-  --text-3xl:  30px;
-  --text-4xl:  36px;
+  --text-xs:   12px;
+  --text-sm:   14px;
+  --text-base: 16px;
+  --text-lg:   18px;
+  --text-xl:   22px;
+  --text-2xl:  26px;
+  --text-3xl:  32px;
+  --text-4xl:  40px;
 
-  /* --- Shadows --- */
-  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.5);
-  --shadow-md:  0 4px 12px rgba(0, 0, 0, 0.6);
-  --shadow-lg:  0 8px 32px rgba(0, 0, 0, 0.7);
+  /* --- Premium Shadows & Glows --- */
+  --shadow-sm:  0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md:  0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-lg:  0 16px 48px rgba(0, 0, 0, 0.7), 0 0 1px rgba(255, 255, 255, 0.1);
+  --glow-orange: 0 0 20px rgba(255, 122, 0, 0.25);
+  --glow-green:  0 0 20px rgba(0, 230, 118, 0.25);
 
   /* --- Transitions --- */
-  --transition-fast:   150ms ease-out;
-  --transition-normal: 250ms ease-out;
-  --transition-slow:   400ms ease-out;
+  --transition-fast:   150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow:   400ms cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* --- Sidebar --- */
-  --sidebar-width:       240px;
-  --sidebar-width-icon:  60px;
-  --topbar-height:       56px;
+  /* --- Layout dimensions --- */
+  --sidebar-width:       260px;
+  --sidebar-width-icon:  70px;
+  --topbar-height:       64px;
   --bottom-nav-height:   64px;
 }
