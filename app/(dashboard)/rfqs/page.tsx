@@ -40,6 +40,11 @@ export default function RFQsPage() {
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [selectedRFQ, setSelectedRFQ] = useState<RFQ | null>(null)
 
+  // Edit State
+  const [isEditing, setIsEditing] = useState(false)
+  const [editTitle, setEditTitle] = useState('')
+  const [editDeadline, setEditDeadline] = useState('')
+
   // Create RFQ Form State
   const [title, setTitle] = useState('')
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([])
@@ -358,6 +363,38 @@ export default function RFQsPage() {
     }
   }
 
+  // Update RFQ
+  async function handleUpdateRFQ() {
+    if (!selectedRFQ || !editTitle || !editDeadline) return
+    try {
+      const rfqRef = doc(db, 'rfqs', selectedRFQ.id)
+      const updatedDeadline = new Date(editDeadline)
+      
+      await updateDoc(rfqRef, {
+        title: editTitle,
+        'dates.deadline': updatedDeadline
+      })
+      
+      await logAction({
+        action: 'UPDATE_RFQ_STATUS',
+        targetId: selectedRFQ.id,
+        targetType: 'rfq',
+        details: `แก้ไขข้อมูลใบขอราคา: ${selectedRFQ.rfqNumber} -> หัวข้อ: ${editTitle}`
+      })
+      
+      setSelectedRFQ(prev => prev ? { 
+        ...prev, 
+        title: editTitle, 
+        dates: { ...prev.dates, deadline: updatedDeadline as any } 
+      } : null)
+      
+      setIsEditing(false)
+    } catch (err) {
+      console.error('[RFQs] Update error:', err)
+      alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล')
+    }
+  }
+
   // Delete RFQ
   async function handleDeleteRFQ(id: string, rfqNo: string) {
     if (!confirm(`คุณแน่ใจหรือไม่ที่จะลบใบขอราคา "${rfqNo}"?`)) return
@@ -545,18 +582,89 @@ export default function RFQsPage() {
             <div className={styles.overlay} onClick={() => setSelectedRFQ(null)} />
             <div className={styles.modal} role="dialog">
               <div className={styles.modalHeader}>
-                <div>
-                  <span style={{ fontSize: '12px', color: 'var(--color-orange)', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
-                    {selectedRFQ.rfqNumber}
-                  </span>
-                  <h2 style={{ fontSize: '20px', fontWeight: 700 }}>{selectedRFQ.title}</h2>
-                </div>
-                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                  <button onClick={() => handleDeleteRFQ(selectedRFQ.id, selectedRFQ.rfqNumber)} style={{ background: 'transparent', border: 'none', color: 'var(--color-red)', cursor: 'pointer' }}>
-                    🗑️ ลบขอราคา
-                  </button>
-                  <button onClick={() => setSelectedRFQ(null)} className={styles.closeBtn}>✕</button>
-                </div>
+                {isEditing ? (
+                  <>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1, marginRight: '24px' }}>
+                      <label className={styles.label}>แก้ไขหัวข้อใบขอราคา</label>
+                      <input
+                        type="text"
+                        value={editTitle}
+                        onChange={e => setEditTitle(e.target.value)}
+                        className={styles.input}
+                        style={{ fontSize: '18px', fontWeight: 700, padding: '6px 12px' }}
+                        required
+                      />
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: 600 }}>เดดไลน์เสนอราคา:</span>
+                        <input
+                          type="date"
+                          value={editDeadline}
+                          onChange={e => setEditDeadline(e.target.value)}
+                          className={styles.input}
+                          style={{ width: '160px', padding: '4px 8px', fontSize: '12px' }}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                      <button
+                        onClick={handleUpdateRFQ}
+                        className={styles.actionBtn}
+                        style={{ background: 'var(--gradient-green)', color: '#000', border: 'none', fontWeight: 700, padding: '8px 16px' }}
+                      >
+                        💾 บันทึก
+                      </button>
+                      <button
+                        onClick={() => setIsEditing(false)}
+                        className={styles.actionBtn}
+                        style={{ padding: '8px 16px' }}
+                      >
+                        ยกเลิก
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <span style={{ fontSize: '12px', color: 'var(--color-orange)', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
+                        {selectedRFQ.rfqNumber}
+                      </span>
+                      <h2 style={{ fontSize: '20px', fontWeight: 700 }}>{selectedRFQ.title}</h2>
+                      <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
+                        วันสิ้นสุดเสนอราคา: <span style={{ color: 'var(--color-red)', fontWeight: 600 }}>{formatDeadlineDate(selectedRFQ.dates?.deadline)}</span>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }} data-no-print>
+                      <button
+                        onClick={() => {
+                          setIsEditing(true)
+                          setEditTitle(selectedRFQ.title)
+                          const dl = selectedRFQ.dates?.deadline
+                          const dlDate = dl ? ((dl as any).seconds ? new Date((dl as any).seconds * 1000) : new Date(dl as any)) : new Date()
+                          setEditDeadline(dlDate.toISOString().split('T')[0])
+                        }}
+                        className={styles.actionBtn}
+                        style={{ borderColor: 'var(--color-orange)', color: 'var(--color-orange)', padding: '8px 16px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                      >
+                        ✏️ แก้ไข
+                      </button>
+                      <button
+                        onClick={() => window.print()}
+                        className={styles.actionBtn}
+                        style={{ borderColor: 'var(--color-blue)', color: 'var(--color-blue)', padding: '8px 16px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                      >
+                        🖨️ พิมพ์ PDF
+                      </button>
+                      <button 
+                        onClick={() => handleDeleteRFQ(selectedRFQ.id, selectedRFQ.rfqNumber)} 
+                        style={{ background: 'transparent', border: 'none', color: 'var(--color-red)', cursor: 'pointer', fontSize: '13px' }}
+                      >
+                        🗑️ ลบขอราคา
+                      </button>
+                      <button onClick={() => { setSelectedRFQ(null); setIsEditing(false); }} className={styles.closeBtn}>✕</button>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className={styles.modalBody}>
@@ -869,6 +977,68 @@ export default function RFQsPage() {
           </>
         )}
       </section>
+
+      {/* Hidden Printing Template for PDF Download */}
+      <div className="print-document" style={{ display: 'none' }}>
+        <div className="print-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '2px solid #000', paddingBottom: '12pt', marginBottom: '16pt' }}>
+          <div>
+            <h1 style={{ fontSize: '24pt', fontWeight: 700, margin: 0 }}>ใบขอราคาสินค้า</h1>
+            <p style={{ fontSize: '12pt', color: '#555', marginTop: '4pt', margin: 0 }}>Request for Quotation (RFQ)</p>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: '16pt', fontWeight: 700, color: '#FF7A00' }}>{selectedRFQ?.rfqNumber}</div>
+            <div style={{ fontSize: '10pt', color: '#555', marginTop: '4pt' }}>
+              วันที่ออกเอกสาร: {selectedRFQ?.dates?.issued ? formatDeadlineDate(selectedRFQ.dates.issued) : '-'}
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20pt', marginBottom: '20pt' }}>
+          <div>
+            <h3 style={{ fontSize: '12pt', borderBottom: '1px solid #000', paddingBottom: '4pt', marginBottom: '8pt', marginTop: 0 }}>ผู้ขอราคา</h3>
+            <p style={{ fontWeight: 600, margin: '0 0 4pt 0' }}>บริษัท จัดซื้อและจัดจ้าง จำกัด</p>
+            <p style={{ color: '#555', margin: 0 }}>แผนกจัดซื้อกลาง</p>
+          </div>
+          <div>
+            <h3 style={{ fontSize: '12pt', borderBottom: '1px solid #000', paddingBottom: '4pt', marginBottom: '8pt', marginTop: 0 }}>ข้อมูลทั่วไป</h3>
+            <p style={{ margin: '0 0 4pt 0' }}><strong>หัวข้อ:</strong> {selectedRFQ?.title}</p>
+            <p style={{ margin: 0 }}><strong>วันสิ้นสุดเสนอราคา (Deadline):</strong> {selectedRFQ?.dates?.deadline ? formatDeadlineDate(selectedRFQ.dates.deadline) : '-'}</p>
+          </div>
+        </div>
+
+        <h3 style={{ fontSize: '12pt', borderBottom: '1px solid #000', paddingBottom: '4pt', marginBottom: '8pt' }}>รายการสินค้าที่ต้องการ (Items Requested)</h3>
+        <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '30pt' }}>
+          <thead>
+            <tr style={{ background: '#f0f0f0' }}>
+              <th style={{ border: '1px solid #ccc', padding: '8pt', textAlign: 'left', fontWeight: 600 }}>ลำดับ</th>
+              <th style={{ border: '1px solid #ccc', padding: '8pt', textAlign: 'left', fontWeight: 600 }}>รายการสินค้า</th>
+              <th style={{ border: '1px solid #ccc', padding: '8pt', textAlign: 'center', fontWeight: 600 }}>จำนวน</th>
+              <th style={{ border: '1px solid #ccc', padding: '8pt', textAlign: 'left', fontWeight: 600 }}>หน่วยนับ</th>
+            </tr>
+          </thead>
+          <tbody>
+            {selectedRFQ?.items?.map((item, idx) => (
+              <tr key={idx}>
+                <td style={{ border: '1px solid #ccc', padding: '8pt' }}>{idx + 1}</td>
+                <td style={{ border: '1px solid #ccc', padding: '8pt', fontWeight: 600 }}>{item.productName}</td>
+                <td style={{ border: '1px solid #ccc', padding: '8pt', textAlign: 'center', fontWeight: 700 }}>{item.quantity}</td>
+                <td style={{ border: '1px solid #ccc', padding: '8pt' }}>{item.unit}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40pt', marginTop: '80pt', textAlign: 'center' }}>
+          <div>
+            <div style={{ borderBottom: '1px solid #000', width: '200px', margin: '0 auto 8pt auto', height: '40px' }}></div>
+            <p style={{ fontSize: '10pt', margin: 0 }}>ผู้จัดเตรียม</p>
+          </div>
+          <div>
+            <div style={{ borderBottom: '1px solid #000', width: '200px', margin: '0 auto 8pt auto', height: '40px' }}></div>
+            <p style={{ fontSize: '10pt', margin: 0 }}>ผู้จัดการแผนกจัดซื้อ (อนุมัติ)</p>
+          </div>
+        </div>
+      </div>
     </>
   )
 }
